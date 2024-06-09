@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from typing import Any, List, Optional, Dict, Type, Literal
+from typing import Any, Dict, List, Optional
 from uuid import UUID
-from langchain_core.runnables import Runnable
+
 from langchain_core.callbacks import AsyncCallbackHandler
+from langchain_core.runnables import Runnable
 from loguru import logger
-from workflow import Workflow
+
 from session import state
+from workflow import Workflow
 
 
 class SessionCallbackHandler(AsyncCallbackHandler):
@@ -32,9 +34,7 @@ class SessionCallbackHandler(AsyncCallbackHandler):
                 run_id: f"{self.workflow_name}.{sub_process_name}",
             }
         else:
-            state.current_running[
-                run_id
-            ] = f"{self.workflow_name}.{sub_process_name}"
+            state.current_running[run_id] = f"{self.workflow_name}.{sub_process_name}"
 
     async def on_chain_end(
         self,
@@ -52,24 +52,6 @@ class SessionCallbackHandler(AsyncCallbackHandler):
 def _workflow_bind_with_session(workflow: Workflow) -> Runnable:
     workflow_name = workflow.__class__.__name__
     runnable = workflow.get_runnable()
-    return runnable.with_config(
-        callbacks=[SessionCallbackHandler(workflow_name)],
-    )
-
-
-def bind_with_session(cls: Type[Workflow]) -> Type[Workflow]:
-    def new_get_runnable(self):
-        return _workflow_bind_with_session(self)
-
-    setattr(cls, "get_runnable", new_get_runnable)
-    return cls
-
-
-def bind_runnable_with_session(
-    runnable: Runnable,
-    parent_Workflow: Type[Workflow],
-) -> Runnable:
-    workflow_name = parent_Workflow.__name__
     return runnable.with_config(
         callbacks=[SessionCallbackHandler(workflow_name)],
     )

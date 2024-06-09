@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
-from typing import (
-    Any,
-    Dict,
-    ItemsView,
-    KeysView,
-    Literal,
-    ValuesView,
-    Union,
-    MutableMapping,
-)
-from typing_extensions import TypeAlias
-from loguru import logger
 import datetime
+from typing import (Any, Dict, ItemsView, KeysView, Literal, MutableMapping,
+                    Union, ValuesView)
+
+from loguru import logger
+from typing_extensions import TypeAlias
 
 Key: TypeAlias = Union[str, int]
 
@@ -118,9 +111,5 @@ class State(MutableMapping[Key, Any]):
         return self._state.values()
 
 
-def initialize_state(at: Literal["cli", "web"]) -> State:
-    return State(at)
-
-
 # Initialize the global state
-state: State = initialize_state("cli")
+state: State = State("cli")

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-from langchain_core.runnables import RunnableLambda, Runnable
+
 from langchain_community.chat_models import ChatOllama
-from langchain_core.pydantic_v1 import BaseModel, Field
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage
-from utils import auto_schema_prompt
-from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_core.runnables import Runnable
+from langchain_openai import ChatOpenAI
+
+from utils import auto_schema_prompt
 
 
 class Workflow(ABC):
@@ -16,20 +18,6 @@ class Workflow(ABC):
     @abstractmethod
     def get_runnable(self) -> Runnable:
         pass
-
-
-# Function as a workflow
-class Magic(Workflow):
-    def __init__(self):
-        def add(input: int) -> int:
-            """Adds 2 to the input"""
-            return input + 2
-
-        self.description = str(add.__doc__)
-        self.runnable = RunnableLambda(add)
-
-    def get_runnable(self):
-        return self.runnable
 
 
 # LLM involved Runnable as a workflow
@@ -86,10 +74,3 @@ class ConsultOpenAIGPT4(Workflow):
 
     def get_runnable(self):
         return self.runnable
-
-
-# Langgraph as a workflow
-# To be implemented
-if __name__ == "__main__":
-    print(issubclass(Magic, Workflow))
-    print(issubclass(ConsultCodellama, Workflow))

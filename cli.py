@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import asyncio
 import re
 from typing import AsyncIterator
@@ -10,7 +9,7 @@ from rich.live import Live
 from rich.panel import Panel
 from rich.spinner import Spinner
 
-from core import Coordinator
+from coordinator import Coordinator
 
 
 class Entity:
@@ -76,43 +75,35 @@ class CliApp:
         self.system = System(self.console)
         self.coordinator = Coordinator()
 
-    def mainloop(self):
+    async def prompt_loop(self) -> None:
         self.system.send_message("Medical Multi Agent initialized")
         self.system.send_message(
             "Type '/file <file_path>' followed by a url to pass a file to the AI agent",
         )
         self.system.send_message("Type '/bye' to exit the program")
-
-        async def prompt_loop():
-            while True:
-                self.system.send_message("Enter your questions or commands:")
-                message = input(
-                    ">>> ",
-                ).strip()  # Using plain input to get user input
-                self.console.rule()
-                self.user.send_message(message)
-                if re.search(r"/bye", message, re.IGNORECASE):
-                    self.system.send_message("Exiting the program")
-                    break
-                else:
-                    if match := re.search(
-                        r"/file (\w+)",
-                        message,
-                        re.IGNORECASE,
-                    ):
-                        file_path = match.group(1).strip()
-                        self.system.send_message(f"File path: {file_path}")
-                        logger.info(f"User upload a file: {file_path}")
-                    message_generator = await self.coordinator.start_with(
-                        message,
-                    )
-                    await self.ai.send_stream_message(message_generator)
-
-        asyncio.run(prompt_loop())
-
-    def run(self):
-        self.mainloop()
+        while True:
+            self.system.send_message("Enter your questions or commands:")
+            message = input(
+                ">>> ",
+            ).strip()  # Using plain input to get user input
+            self.console.rule()
+            self.user.send_message(message)
+            if re.search(r"/bye", message, re.IGNORECASE):
+                self.system.send_message("Exiting the program")
+                return
+            if match := re.search(
+                r"/file (\w+)",
+                message,
+                re.IGNORECASE,
+            ):
+                file_path = match.group(1).strip()
+                self.system.send_message(f"File path: {file_path}")
+                logger.info(f"User upload a file: {file_path}")
+            message_generator = await self.coordinator.start_with(
+                message,
+            )
+            await self.ai.send_stream_message(message_generator)
 
 
 if __name__ == "__main__":
-    CliApp().run()
+    asyncio.run(CliApp().prompt_loop())
