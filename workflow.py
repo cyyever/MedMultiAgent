@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-from os import system
 from langchain_core.runnables import RunnableLambda, Runnable
 from langchain_community.chat_models import ChatOllama
 from langchain_core.pydantic_v1 import BaseModel, Field
@@ -8,6 +7,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage
 from utils import auto_schema_prompt
 from langchain_openai import ChatOpenAI
+from langchain_core.output_parsers import StrOutputParser
 
 
 class Workflow(ABC):
@@ -78,7 +78,6 @@ class ConsultOpenAIGPT4(Workflow):
         self.llm = ChatOpenAI(model="gpt-4-turbo")
         self.description = """Consult the most intelligent
                               AI model GPT-4 for your questions.\n"""
-        from langchain_core.output_parsers import StrOutputParser
 
         self.prompt = ChatPromptTemplate.from_messages(
             messages=[HumanMessage(content="{userinput}")],

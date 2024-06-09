@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from typing import AsyncIterator, Dict, Any, Union
+import asyncio
 import re
+from typing import AsyncIterator
+
+from loguru import logger
 from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
 from rich.spinner import Spinner
-import asyncio
-from loguru import logger
+
 from core import Coordinator
 
 
@@ -90,7 +92,6 @@ class CliApp:
                 self.console.rule()
                 self.user.send_message(message)
                 if re.search(r"/bye", message, re.IGNORECASE):
-                    logger.info("Exiting the program")
                     self.system.send_message("Exiting the program")
                     break
                 else:
