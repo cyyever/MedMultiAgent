@@ -15,4 +15,5 @@ class Coordinator:
         message: str,
     ) -> AsyncIterator:
         workflow = ConsultCodellama().get_runnable()
+        print("aaaa message is ",message)
         return workflow.astream(message)
