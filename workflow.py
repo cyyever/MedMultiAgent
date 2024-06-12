@@ -31,15 +31,15 @@ class ConsultCodellama(Workflow):
                                   from 0 to 10""",
             )
 
-        self.llm = ChatOllama(model="codellama")
+        self.llm = ChatOllama(model="llama3")
         self.prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
                     "system",
                     """You are a AI assitant
-                 with expertise in code review.\n
-                 You will be given a code snippet and you
-                 should provide your feedback and rating on the code. \n
+                 with expertise in medical review.\n
+                 You will be given a medical question and you
+                 should provide your feedback. \n
                  {output_prompt} \n""",
                 ),
                 ("user", "{code_snippet} \n"),
