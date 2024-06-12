@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import AsyncIterator
 
-from workflow import ConsultOpenAIGPT4
+from workflow import ConsultCodellama
 
 
 # Just for testing
@@ -14,5 +14,5 @@ class Coordinator:
         self,
         message: str,
     ) -> AsyncIterator:
-        workflow = ConsultOpenAIGPT4().get_runnable()
+        workflow = ConsultCodellama().get_runnable()
         return workflow.astream(message)
