@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
@@ -28,7 +26,7 @@ class AI(Entity):
         self.coordinator = Coordinator()
 
     def query(self, message: str) -> None:
-        with Live(console=console, refresh_per_second=10) as live:
+        with Live(console=console) as live:
             response = self.coordinator.invoke(message)
             live.update(self.__create_completed_panel(response))
 
@@ -45,7 +43,7 @@ class AI(Entity):
         return panel
 
 
-class CliApp:
+class TerminalDemo:
     def __init__(self) -> None:
         self.ai = AI()
         self.system = System()
@@ -66,4 +64,4 @@ class CliApp:
 
 
 if __name__ == "__main__":
-    CliApp().run()
+    TerminalDemo().run()
