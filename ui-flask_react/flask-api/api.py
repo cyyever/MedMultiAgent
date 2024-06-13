@@ -1,7 +1,15 @@
 import time
-from flask import Flask, Response
+from flask import Flask, Response, request
+
+import sys
+sys.path.insert(0, '../..')
+
+from  coordinator import Coordinator
+
 
 app = Flask(__name__)
+
+crdnt = Coordinator()
 
 @app.route('/time')
 def get_current_time():
@@ -32,6 +40,11 @@ def generate():
 
 @app.route('/stream-sse', methods=['GET', 'POST'])
 def stream():
+    data = request.get_json()
+    messages = data['messages']
+    
+    print(messages[-1])
+    
     response = Response(generate(), mimetype='text/event-stream')
     response.headers['Cache-Control'] = 'no-cache'
     response.headers['X-Accel-Buffering'] = 'no'  # Important for some proxies
