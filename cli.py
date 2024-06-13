@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from typing import Iterator
 
-from loguru import logger
 from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
@@ -13,9 +11,10 @@ console = Console()
 
 
 class Entity:
-    prefix = "No prefix"
+    prefix = ""
 
     def send_message(self, message: str) -> None:
+        assert self.prefix
         console.print(f"{self.prefix} {message}")
 
 
@@ -26,39 +25,37 @@ class System(Entity):
 class AI(Entity):
     prefix = ":robot: [bold magenta]AI:[/bold magenta]"
 
-    def send_stream_message(self, message_generator: Iterator) -> None:
+    def __init__(self) -> None:
+        self.coordinator = Coordinator()
 
-        def create_completed_panel(message: str):
-            completed_message = (
-                f"Status: [green]Completed![/green] \n {self.prefix} {message}"
-            )
-            panel = Panel(
-                completed_message,
-                title="AI Generating Response",
-                title_align="left",
-                border_style="magenta",
-            )
-            return panel
-
+    def query(self, message: str) -> None:
         typed_message = ""
         with Live(console=console, refresh_per_second=10) as live:
-            for msg in message_generator:
+            for msg in self.coordinator.invoke(message):
                 typed_message += msg
                 # live.update(typed_message)
-            live.update(create_completed_panel(typed_message))
+            live.update(self.__create_completed_panel(typed_message))
+
+    def __create_completed_panel(self, message: str):
+        completed_message = (
+            f"Status: [green]Completed![/green] \n {self.prefix} {message}"
+        )
+        panel = Panel(
+            completed_message,
+            title="AI Generating Response",
+            title_align="left",
+            border_style="magenta",
+        )
+        return panel
 
 
 class CliApp:
-    def __init__(self):
+    def __init__(self) -> None:
         self.ai = AI()
         self.system = System()
-        self.coordinator = Coordinator()
 
     def prompt_loop(self) -> None:
         self.system.send_message("Medical Multi Agent initialized")
-        self.system.send_message(
-            "Type '/file <file_path>' followed by a url to pass a file to the AI agent",
-        )
         self.system.send_message("Type '/bye' to exit the program")
         while True:
             self.system.send_message("Enter your questions or commands:")
@@ -69,15 +66,7 @@ class CliApp:
             if re.search(r"/bye", message, re.IGNORECASE):
                 self.system.send_message("Exiting the program")
                 return
-            if match := re.search(
-                r"/file (\w+)",
-                message,
-                re.IGNORECASE,
-            ):
-                file_path = match.group(1).strip()
-                self.system.send_message(f"File path: {file_path}")
-                logger.info(f"User upload a file: {file_path}")
-            self.ai.send_stream_message(self.coordinator.stream(message))
+            self.ai.query(message)
 
 
 if __name__ == "__main__":

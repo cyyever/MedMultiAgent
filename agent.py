@@ -1,3 +1,5 @@
+from typing import Any, Iterator
+
 from langchain_community.chat_models import ChatOllama
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -20,5 +22,14 @@ class DoctorAgent:
             ],
         )
 
-    def get_runnable(self) -> RunnableSerializable:
+    def invoke(self, message: str) -> Any:
+        return self.__get_runnable().invoke(self.__create_input(message))
+
+    def stream(self, message: str) -> Iterator:
+        return self.__get_runnable().stream(self.__create_input(message))
+
+    def __get_runnable(self) -> RunnableSerializable:
         return self.prompt_template | self.llm | StrOutputParser()
+
+    def __create_input(self, message: str) -> dict:
+        return {"medical_question": message}
