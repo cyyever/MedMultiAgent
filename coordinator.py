@@ -8,4 +8,4 @@ class Coordinator:
         self.doctor = DoctorAgent()
 
     def stream(self, message: str) -> Iterator:
-        return self.doctor.get_runnable().stream(message)
+        return self.doctor.get_runnable().stream({"medical_question": message})

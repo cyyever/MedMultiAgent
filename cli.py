@@ -42,10 +42,9 @@ class AI(Entity):
 
         typed_message = ""
         with Live(console=console, refresh_per_second=10) as live:
-            for char in message_generator:
-                print(char)
-                typed_message += char
-                live.update(typed_message)
+            for msg in message_generator:
+                typed_message += msg
+                # live.update(typed_message)
             live.update(create_completed_panel(typed_message))
 
 
