@@ -20,5 +20,14 @@ class DoctorAgent:
             ],
         )
 
-    def get_runnable(self) -> RunnableSerializable:
+    def invoke(self, message: str) -> str:
+        return self.__get_runnable().invoke(self.__create_input(message))
+
+    # def stream(self, message: str) -> Iterator:
+    #     return self.__get_runnable().stream(self.__create_input(message))
+
+    def __get_runnable(self) -> RunnableSerializable:
         return self.prompt_template | self.llm | StrOutputParser()
+
+    def __create_input(self, message: str) -> dict:
+        return {"medical_question": message}
