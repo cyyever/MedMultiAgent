@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
 
 from rich.console import Console
 from rich.live import Live
@@ -51,7 +50,7 @@ class CliApp:
         self.ai = AI()
         self.system = System()
 
-    def prompt_loop(self) -> None:
+    def run(self) -> None:
         self.system.send_message("Medical Multi Agent initialized")
         self.system.send_message("Type '/bye' to exit the program")
         while True:
@@ -60,11 +59,11 @@ class CliApp:
                 ">>> ",
             ).strip()  # Using plain input to get user input
             console.rule()
-            if re.search(r"/bye", message, re.IGNORECASE):
+            if message.lower() == "/bye":
                 self.system.send_message("Exiting the program")
                 return
             self.ai.query(message)
 
 
 if __name__ == "__main__":
-    CliApp().prompt_loop()
+    CliApp().run()
