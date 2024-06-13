@@ -8,4 +8,6 @@ class Coordinator:
         self.doctor = DoctorAgent()
 
     def invoke(self, message: str) -> Any:
-        return self.doctor.invoke(message=message)
+        res = self.doctor.invoke(message=message)
+        assert isinstance(res, str)
+        return res

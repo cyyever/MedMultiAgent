@@ -29,12 +29,9 @@ class AI(Entity):
         self.coordinator = Coordinator()
 
     def query(self, message: str) -> None:
-        typed_message = ""
         with Live(console=console, refresh_per_second=10) as live:
-            for msg in self.coordinator.invoke(message):
-                typed_message += msg
-                # live.update(typed_message)
-            live.update(self.__create_completed_panel(typed_message))
+            response = self.coordinator.invoke(message)
+            live.update(self.__create_completed_panel(response))
 
     def __create_completed_panel(self, message: str):
         completed_message = (
