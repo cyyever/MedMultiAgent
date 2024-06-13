@@ -13,7 +13,7 @@ class DoctorAgent:
                     "system",
                     """You are an AI doctor
                  with expertise in medical diagnosis.\n
-                 You will be given a medical question from an user and you
+                 You will be given a medical question from a patient and you
                  should provide your answer. \n""",
                 ),
                 ("user", "{medical_question} \n"),
