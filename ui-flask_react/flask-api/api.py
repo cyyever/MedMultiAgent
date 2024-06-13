@@ -42,10 +42,13 @@ def generate():
 def stream():
     data = request.get_json()
     messages = data['messages']
+    msg = messages[-1]
     
-    print(messages[-1])
+    print(msg)
     
-    response = Response(generate(), mimetype='text/event-stream')
+    res = crdnt.invoke(msg['content'])
+    
+    response = Response(res, mimetype='text/event-stream')
     response.headers['Cache-Control'] = 'no-cache'
     response.headers['X-Accel-Buffering'] = 'no'  # Important for some proxies
     return response
