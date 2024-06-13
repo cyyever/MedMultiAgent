@@ -3,3 +3,5 @@ loguru
 langchain-core
 langchain-community
 langchain-openai
+flask 
+python-dotenv
