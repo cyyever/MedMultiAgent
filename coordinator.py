@@ -1,19 +1,11 @@
-# -*- coding: utf-8 -*-
-from typing import AsyncIterator
+from typing import Iterator
 
-from workflow import ConsultCodellama
+from agent import DoctorAgent
 
 
-# Just for testing
-# Not the final version
 class Coordinator:
     def __init__(self) -> None:
-        pass
+        self.doctor = DoctorAgent()
 
-    async def start_with(
-        self,
-        message: str,
-    ) -> AsyncIterator:
-        workflow = ConsultCodellama().get_runnable()
-        print("aaaa message is ",message)
-        return workflow.astream(message)
+    def stream(self, message: str) -> Iterator:
+        return self.doctor.get_runnable().stream(message)

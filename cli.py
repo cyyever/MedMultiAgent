@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import asyncio
 import re
-from typing import AsyncIterator
+from typing import Iterator
 
 from loguru import logger
 from rich.console import Console
@@ -10,21 +9,24 @@ from rich.panel import Panel
 
 from coordinator import Coordinator
 
+console = Console()
+
 
 class Entity:
-    def __init__(self, prefix: str, console: Console):
-        self.prefix = prefix
-        self.console = console
+    prefix = "No prefix"
 
-    def send_message(self, message: str):
-        self.console.print(f"{self.prefix} {message}")
+    def send_message(self, message: str) -> None:
+        console.print(f"{self.prefix} {message}")
+
+
+class System(Entity):
+    prefix = ":gear: [bold green]System:[/bold green]"
 
 
 class AI(Entity):
-    def __init__(self, console: Console):
-        super().__init__(":robot: [bold magenta]AI:[/bold magenta]", console)
+    prefix = ":robot: [bold magenta]AI:[/bold magenta]"
 
-    async def send_stream_message(self, message_generator: AsyncIterator):
+    def send_stream_message(self, message_generator: Iterator) -> None:
 
         def create_completed_panel(message: str):
             completed_message = (
@@ -39,27 +41,21 @@ class AI(Entity):
             return panel
 
         typed_message = ""
-        with Live(console=self.console, refresh_per_second=10) as live:
-            async for char in message_generator:
+        with Live(console=console, refresh_per_second=10) as live:
+            for char in message_generator:
                 print(char)
                 typed_message += char
                 live.update(typed_message)
             live.update(create_completed_panel(typed_message))
 
 
-class System(Entity):
-    def __init__(self, console: Console):
-        super().__init__(":gear: [bold green]System:[/bold green]", console)
-
-
 class CliApp:
     def __init__(self):
-        self.console = Console()
-        self.ai = AI(self.console)
-        self.system = System(self.console)
+        self.ai = AI()
+        self.system = System()
         self.coordinator = Coordinator()
 
-    async def prompt_loop(self) -> None:
+    def prompt_loop(self) -> None:
         self.system.send_message("Medical Multi Agent initialized")
         self.system.send_message(
             "Type '/file <file_path>' followed by a url to pass a file to the AI agent",
@@ -70,7 +66,7 @@ class CliApp:
             message = input(
                 ">>> ",
             ).strip()  # Using plain input to get user input
-            self.console.rule()
+            console.rule()
             if re.search(r"/bye", message, re.IGNORECASE):
                 self.system.send_message("Exiting the program")
                 return
@@ -82,11 +78,8 @@ class CliApp:
                 file_path = match.group(1).strip()
                 self.system.send_message(f"File path: {file_path}")
                 logger.info(f"User upload a file: {file_path}")
-            message_generator = await self.coordinator.start_with(
-                message,
-            )
-            await self.ai.send_stream_message(message_generator)
+            self.ai.send_stream_message(self.coordinator.stream(message))
 
 
 if __name__ == "__main__":
-    asyncio.run(CliApp().prompt_loop())
+    CliApp().prompt_loop()

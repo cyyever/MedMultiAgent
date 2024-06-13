@@ -4,14 +4,14 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableSerializable
 
 
-class ConsultAgent:
+class DoctorAgent:
     def __init__(self) -> None:
         self.llm: ChatOllama = ChatOllama(model="llama3")
         self.prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
                     "system",
-                    """You are an AI assistant
+                    """You are an AI doctor
                  with expertise in medical diagnosis.\n
                  You will be given a medical question from an user and you
                  should provide your answer. \n""",
