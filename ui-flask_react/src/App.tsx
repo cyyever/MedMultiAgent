@@ -15,7 +15,8 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Layout, Menu, theme, Typography, Divider  } from 'antd';
+import { Layout, Menu, theme, Typography, Divider, Collapse } from 'antd';
+import CollapsibleChatItem from './collapsibleChatItem';
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -47,144 +48,162 @@ function App() {
 
   return (
     <div className="App">
-      <Layout hasSider style={{ minHeight: '100vh' }}>
+      <Layout hasSider style={{ minHeight: '100vh', textAlign: 'left' }}>
         <Sider
-          style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }}
+          style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, textAlign: 'left' }}
+          breakpoint="lg"
         >
-          <Title level={3} style={{ color: colorWhite }}>MedMultiAgent</Title>
-          <Divider style={{borderColor: colorWhite, width: 'calc(100% - 20px)' }} />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} />
+          <div style={{ width: "85%", margin: '0 auto' }}>
+            <Title level={4} style={{ color: colorWhite, marginBottom: '10px' }}>MedMultiAgent</Title>
+            <Divider style={{ borderColor: colorWhite, width: 'calc(100% - 20px)' }} plain />
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} />
+          </div>
         </Sider>
         <Layout style={{ marginLeft: 200 }}>
-          <Header style={{ padding: 0, background: colorBgLayout }}>
-            <Title level={3}>LLaMA-Med-Agent</Title>
-          </Header>
-          <Content style={{ margin: '24px 0px 0', overflow: 'initial' }}>
-            <div
-              style={{
-                padding: 24,
-                textAlign: 'center',
-                background: colorBgContainer,
-                borderRadius: borderRadiusLG,
-              }}
-            >
-              <div style={{ backgroundColor: colorBgLayout, height: '80vh' }}>
-                <ProChat
-                  helloMessage={
-                    'Welcome using MedMultiAgent. Feel free to ask anything'
-                  }
-                  // request={async (messages) => {
-                  //   // const mockedData: string = `这是一段模拟的对话数据。本次会话传入了${messages.length}条消息`;
-                  //   // return new Response(mockedData);
-
-                  //   const response = await fetch('/stream-sse');
-                  //   console.log('messages', messages);
-
-                  //   if (!response.ok || !response.body) {
-                  //     throw new Error(`HTTP error! status: ${response.status}`)
-                  //   }
-
-                  //   const reader = response.body.getReader();
-                  //   const decoder = new TextDecoder('utf-8');
-                  //   const encoder = new TextEncoder();
-
-                  //   const readableStream = new ReadableStream({
-                  //     async start(controller) {
-                  //       function push() {
-                  //         reader
-                  //           .read()
-                  //           .then(({ done, value }) => {
-                  //             if (done) {
-                  //               controller.close();
-                  //               return;
-                  //             }
-                  //             const chunk = decoder.decode(value, { stream: true });
-                  //             const message = chunk.replace('data: ', '');
-                  //             controller.enqueue(encoder.encode(message))
-
-                  //             // const parsed = JSON.parse(message);
-                  //             // controller.enqueue(encoder.encode(parsed.choices[0].delta.content));
-                  //             push();
-                  //           })
-                  //           .catch((err) => {
-                  //             console.error('读取流中的数据时发生错误', err);
-                  //             controller.error(err);
-                  //           });
-                  //       }
-                  //       push();
-                  //     },
-                  //   });
-                  //   return new Response(readableStream);
-                  // }}
-                  request={async (messages: any) => {
-
-                    // 正常业务中如下:
-                    const response = await fetch('/stream-sse', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json;charset=UTF-8',
-                      },
-                      body: JSON.stringify({
-                        messages,
-                        stream: true,
-                      }),
-                    });
-                    console.log('messages', messages);
-
-                    // const mockResponse = new MockSSEResponse(dataArray);
-                    // const response = mockResponse.getResponse();
-
-                    // 确保服务器响应是成功的
-                    if (!response.ok || !response.body) {
-                      throw new Error(`HTTP error! status: ${response.status}`);
+          <div style={{ margin: '0 auto', width: '90%' }}>
+            <Header style={{ padding: 0, background: colorBgLayout, lineHeight: 0 }}>
+              <Title level={3} >LLaMA-Med-Agent</Title>
+              <span style={{ fontStyle: 'italic', color: '#777' }}>- A Product of NTU <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a></span>
+            </Header>
+            <Content style={{ margin: '24px 0px 0', overflow: 'initial' }}>
+              <div
+                style={{
+                  padding: 24,
+                  textAlign: 'center',
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                }}
+              >
+                <div style={{ backgroundColor: colorBgLayout, height: '80vh' }}>
+                  <ProChat
+                    style={{ textAlign: 'left' }}
+                    locale='en-US'
+                    helloMessage={
+                      'Welcome using MedMultiAgent. Feel free to ask anything'
                     }
+                    // chatItemRenderConfig={{
+                    //   contentRender: (chatItemProps, defaultContent) => {
+                    //     // console.log(chatItemProps);
 
-                    console.log('getting response');
-                    const decoder = new TextDecoder('utf-8');
-                    const encoder = new TextEncoder();
-                    const reader = response.body?.getReader()
+                    //     if(chatItemProps.originData?.role === "user")
+                    //       return defaultContent;
 
-                    const readableStream = new ReadableStream({
-                      async start(controller) {
-                        function push() {
-                          reader.read().then(({ done, value }) => {
-                            // If there is no more data to read
-                            if (done) {
-                              console.log("done", done);
-                              controller.close();
-                              return;
-                            }
+                    //     return <CollapsibleChatItem node={defaultContent} />
+                    //   },
+                    // }}
+                    // request={async (messages) => {
+                    //   // const mockedData: string = `这是一段模拟的对话数据。本次会话传入了${messages.length}条消息`;
+                    //   // return new Response(mockedData);
 
-                            console.log(done, value);
+                    //   const response = await fetch('/stream-sse');
+                    //   console.log('messages', messages);
 
-                            const chunk = decoder.decode(value, { stream: true })
+                    //   if (!response.ok || !response.body) {
+                    //     throw new Error(`HTTP error! status: ${response.status}`)
+                    //   }
 
-                            // Check chunks by logging to the console
-                            console.log(done, chunk);
+                    //   const reader = response.body.getReader();
+                    //   const decoder = new TextDecoder('utf-8');
+                    //   const encoder = new TextEncoder();
 
-                            // Get the data and send it to the browser via the controller
-                            controller.enqueue(encoder.encode(chunk));
+                    //   const readableStream = new ReadableStream({
+                    //     async start(controller) {
+                    //       function push() {
+                    //         reader
+                    //           .read()
+                    //           .then(({ done, value }) => {
+                    //             if (done) {
+                    //               controller.close();
+                    //               return;
+                    //             }
+                    //             const chunk = decoder.decode(value, { stream: true });
+                    //             const message = chunk.replace('data: ', '');
+                    //             controller.enqueue(encoder.encode(message))
+
+                    //             // const parsed = JSON.parse(message);
+                    //             // controller.enqueue(encoder.encode(parsed.choices[0].delta.content));
+                    //             push();
+                    //           })
+                    //           .catch((err) => {
+                    //             console.error('读取流中的数据时发生错误', err);
+                    //             controller.error(err);
+                    //           });
+                    //       }
+                    //       push();
+                    //     },
+                    //   });
+                    //   return new Response(readableStream);
+                    // }}
+                    request={async (messages: any) => {
+
+                      // 正常业务中如下:
+                      const response = await fetch('/stream-sse', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json;charset=UTF-8',
+                        },
+                        body: JSON.stringify({
+                          messages,
+                          stream: true,
+                        }),
+                      });
+                      console.log('messages', messages);
+
+                      // const mockResponse = new MockSSEResponse(dataArray);
+                      // const response = mockResponse.getResponse();
+
+                      // 确保服务器响应是成功的
+                      if (!response.ok || !response.body) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                      }
+
+                      console.log('getting response');
+                      const decoder = new TextDecoder('utf-8');
+                      const encoder = new TextEncoder();
+                      const reader = response.body?.getReader()
+
+                      const readableStream = new ReadableStream({
+                        async start(controller) {
+                          function push() {
+                            reader.read().then(({ done, value }) => {
+                              // If there is no more data to read
+                              if (done) {
+                                console.log("done", done);
+                                controller.close();
+                                return;
+                              }
+
+                              console.log(done, value);
+
+                              const chunk = decoder.decode(value, { stream: true })
+
+                              // Check chunks by logging to the console
+                              console.log(done, chunk);
+
+                              // Get the data and send it to the browser via the controller
+                              controller.enqueue(encoder.encode(chunk));
 
 
-                            push();
-                          });
-                        }
+                              push();
+                            });
+                          }
 
-                        push();
-                      },
-                    })
+                          push();
+                        },
+                      })
 
 
-                    return new Response(readableStream);
+                      return new Response(readableStream);
 
-                  }}
-                />
-              </div> 
-            </div>
-          </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            NTU <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a>
-          </Footer>
+                    }}
+                  />
+                </div>
+              </div>
+            </Content>
+            {/* <Footer style={{ textAlign: 'center' }}>
+              
+            </Footer> */}
+          </div>
         </Layout>
       </Layout>
 
