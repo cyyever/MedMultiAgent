@@ -54,7 +54,7 @@ function App() {
           breakpoint="lg"
         >
           <div style={{ width: "85%", margin: '0 auto' }}>
-            <Title level={4} style={{ color: colorWhite, marginBottom: '10px' }}>MedMultiAgent</Title>
+            <Title level={4} style={{ color: colorWhite, marginBottom: '10px' }}>MAC-Health</Title>
             <Divider style={{ borderColor: colorWhite, width: 'calc(100% - 20px)' }} plain />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} />
           </div>
@@ -62,8 +62,8 @@ function App() {
         <Layout style={{ marginLeft: 200 }}>
           <div style={{ margin: '0 auto', width: '90%' }}>
             <Header style={{ padding: 0, background: colorBgLayout, lineHeight: 0 }}>
-              <Title level={3} >LLaMA-Med-Agent</Title>
-              <span style={{ fontStyle: 'italic', color: '#777' }}>- A Product of NTU <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a></span>
+              <Title level={3} >Multi-Agent Collaborative Decision Support System for Healthcare</Title>
+              <span style={{ fontStyle: 'italic', color: '#777' }}>- <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a></span>
             </Header>
             <Content style={{ margin: '24px 0px 0', overflow: 'initial' }}>
               <div
@@ -79,7 +79,7 @@ function App() {
                     style={{ textAlign: 'left' }}
                     locale='en-US'
                     helloMessage={
-                      'Welcome using MedMultiAgent. Feel free to ask anything'
+                      'Welcome using MAC-Health. Feel free to ask anything'
                     }
                     // chatItemRenderConfig={{
                     //   contentRender: (chatItemProps, defaultContent) => {
@@ -201,7 +201,7 @@ function App() {
               </div>
             </Content>
             {/* <Footer style={{ textAlign: 'center' }}>
-              
+
             </Footer> */}
           </div>
         </Layout>
