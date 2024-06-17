@@ -63,7 +63,13 @@ function App() {
           <div style={{ margin: '0 auto', width: '90%' }}>
             <Header style={{ padding: 0, background: colorBgLayout, lineHeight: 0 }}>
               <Title level={3} >Multi-Agent Collaborative Decision Support System for Healthcare</Title>
-              <span style={{ fontStyle: 'italic', color: '#777' }}>- <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a></span>
+              <span style={{ fontStyle: 'italic', color: '#777' }}>
+            <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a>
+              </span>
+            <p></p>
+              <span style={{ fontStyle: 'italic', color: '#777' }}>
+            <a href='https://tea.ece.ubc.ca' target='blank'>Trusted and Efficient AI (TEA) Lab</a>
+              </span>
             </Header>
             <Content style={{ margin: '24px 0px 0', overflow: 'initial' }}>
               <div
