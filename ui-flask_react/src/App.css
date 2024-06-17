@@ -32,7 +32,70 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ==============  */
+#all-wrapper{
+  min-height: 100vh;
+}
+
+#main-inner-wrapper {
+  margin: 0 auto;
+  width: 90%;
+}
+
+#main-header-description-list {
+  font-style: italic;
+  color: #777;
+}
+
+#main-content-inner-wrapper{
+  padding: 15px;
+}
+
+#main-content-chat-wrapper{
+  height: 80vh;
+}
+
+#main-content-chat-wrapper p{
+  word-break: keep-all;
+}
+
+@media (max-width: 576px) {
+  #all-wrapper{
+    min-height: auto;
+  }
+
+  #sider{
+    z-index: 10000;
+    position: absolute;
+    height: 100%;
+  }
+
+  #main-inner-wrapper {
+    width: 99%;
+  }
+
+  #main-header-title {
+    font-size: 14px;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  #main-header-description-list {
+    /* font-size: 12px; */
+    display: none;
+  }
+
+  #main-content-inner-wrapper{
+    padding: 0;
+  }
+
+  #main-content-chat-wrapper{
+    height: 80vh;
   }
 }

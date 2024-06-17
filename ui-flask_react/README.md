@@ -24,6 +24,6 @@ Your app is ready to be deployed!
 
 ### Flask
 
-#### `cd flask-api & flask run`
+#### `cd flask-api & flask run --port=5000`
 
 

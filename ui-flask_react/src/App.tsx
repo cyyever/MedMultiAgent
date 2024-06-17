@@ -15,7 +15,7 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Layout, Menu, theme, Typography, Divider, Collapse } from 'antd';
+import { Layout, Menu, theme, Typography, Divider, Collapse, ConfigProvider } from 'antd';
 import CollapsibleChatItem from './collapsibleChatItem';
 
 
@@ -31,11 +31,11 @@ const items: MenuItem[] = [
     key: 'home',
     icon: <HomeOutlined />,
   },
-  {
-    label: 'History',
-    key: 'history',
-    icon: <HistoryOutlined />
-  }
+  // {
+  //   label: 'History',
+  //   key: 'history',
+  //   icon: <HistoryOutlined />
+  // }
 ];
 
 function App() {
@@ -48,10 +48,15 @@ function App() {
 
   return (
     <div className="App">
-      <Layout hasSider style={{ minHeight: '100vh', textAlign: 'left' }}>
+      <Layout id="all-wrapper" hasSider style={{ textAlign: 'left' }}>
         <Sider
-          style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, textAlign: 'left' }}
+          id='sider'
+          // style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, textAlign: 'left' }}
           breakpoint="lg"
+          collapsedWidth="0"
+          onCollapse={(collapsed, type) => {
+            console.log(collapsed, type);
+          }}
         >
           <div style={{ width: "85%", margin: '0 auto' }}>
             <Title level={4} style={{ color: colorWhite, marginBottom: '10px' }}>MAC-Health</Title>
@@ -59,34 +64,34 @@ function App() {
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} />
           </div>
         </Sider>
-        <Layout style={{ marginLeft: 200 }}>
-          <div style={{ margin: '0 auto', width: '90%' }}>
-            <Header style={{ padding: 0, background: colorBgLayout, lineHeight: 0 }}>
-              <Title level={3} >Multi-Agent Collaborative Decision Support System for Healthcare</Title>
-              <span style={{ fontStyle: 'italic', color: '#777' }}>
-            <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a>
-              </span>
-            <p></p>
-              <span style={{ fontStyle: 'italic', color: '#777' }}>
-            <a href='https://tea.ece.ubc.ca' target='blank'>Trusted and Efficient AI (TEA) Lab</a>
-              </span>
+        <Layout id='main'>
+          <div id='main-inner-wrapper'>
+            <Header style={{ padding: 0, background: colorBgLayout, lineHeight: '1rem', height:'auto' }}>
+              <Title level={3} id='main-header-title'>Multi-Agent Collaborative Decision Support System for Healthcare</Title>
+              <ul id='main-header-description-list'>
+                <li>
+                  <a href='https://trustful.federated-learning.org/' target='blank'>Trustworthy Federated Ubiquitous Learning (TrustFUL) Research Lab</a>
+                </li>
+                <li>
+                  <a href='https://tea.ece.ubc.ca' target='blank'>Trusted and Efficient AI (TEA) Lab</a>
+                </li>
+              </ul>
             </Header>
-            <Content style={{ margin: '24px 0px 0', overflow: 'initial' }}>
+            <Content>
               <div
+                id='main-content-inner-wrapper'
                 style={{
-                  padding: 24,
-                  textAlign: 'center',
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
                 }}
               >
-                <div style={{ backgroundColor: colorBgLayout, height: '80vh' }}>
+                <div id='main-content-chat-wrapper' style={{ backgroundColor: colorBgLayout}}>
                   <ProChat
-                    style={{ textAlign: 'left' }}
                     locale='en-US'
                     helloMessage={
                       'Welcome using MAC-Health. Feel free to ask anything'
                     }
+                    assistantMeta={{ avatar: '/doctor.svg', backgroundColor: '#67dedd' }}
                     // chatItemRenderConfig={{
                     //   contentRender: (chatItemProps, defaultContent) => {
                     //     // console.log(chatItemProps);
