@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableSerializable
 
 
-class CaptionAgent:
+class FacebookCaptionAgent:
     def __init__(self) -> None:
         self.llm: ChatOllama = ChatOllama(model="llama3")
         self.prompt_template = ChatPromptTemplate.from_messages(
@@ -13,8 +13,8 @@ class CaptionAgent:
                     "system",
                     """You are an AI agent
                  with expertise in summary.\n
-                 You will be given a phrase you
-                 should provide several Facebook captions according to the phrase. \n""",
+                 You will be given an article summary and you
+                 should provide several Facebook captions according to the summary. \n""",
                 ),
                 ("user", "{phrase} \n"),
             ],

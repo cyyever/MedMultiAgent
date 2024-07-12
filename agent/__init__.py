@@ -1,4 +1,4 @@
-from .caption import CaptionAgent
 from .doctor import DoctorAgent
+from .fb_caption import FacebookCaptionAgent
 
-__all__ = ["DoctorAgent", "CaptionAgent"]
+__all__ = ["DoctorAgent", "FacebookCaptionAgent"]

@@ -1,11 +1,10 @@
-from agent import DoctorAgent
+from agent import DoctorAgent, FacebookCaptionAgent
 
 
 class Coordinator:
     def __init__(self) -> None:
-        self.doctor = DoctorAgent()
+        self.default_agent = DoctorAgent
+        self.agent = FacebookCaptionAgent()
 
     def invoke(self, message: str) -> str:
-        res = self.doctor.invoke(message=message)
-        assert isinstance(res, str)
-        return res
+        return self.agent.invoke(message=message)
