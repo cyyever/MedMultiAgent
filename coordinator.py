@@ -1,10 +1,10 @@
-from agent import DoctorAgent, FacebookCaptionAgent
+from agent import DoctorAgent, JobSkillAgent
 
 
 class Coordinator:
     def __init__(self) -> None:
         self.default_agent = DoctorAgent()
-        self.agent = FacebookCaptionAgent()
+        self.agent = JobSkillAgent()
 
     def invoke(self, message: str) -> str:
-        return self.default_agent.invoke(message=message)
+        return self.agent.invoke(message=message)
