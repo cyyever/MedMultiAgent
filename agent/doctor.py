@@ -1,13 +1,12 @@
-from langchain_community.chat_models import ChatOllama
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableSerializable
+
+from .llama import LLAMAAgent
 
 
-class DoctorAgent:
-    def __init__(self) -> None:
-        self.llm: ChatOllama = ChatOllama(model="llama3")
-        self.prompt_template = ChatPromptTemplate.from_messages(
+class DoctorAgent(LLAMAAgent):
+    @property
+    def prompt_template(self) -> ChatPromptTemplate:
+        return ChatPromptTemplate.from_messages(
             [
                 (
                     "system",
@@ -16,18 +15,6 @@ class DoctorAgent:
                  You will be given a medical question from a patient and you
                  should provide your answer. \n""",
                 ),
-                ("user", "{medical_question} \n"),
+                ("user", "{input} \n"),
             ],
         )
-
-    def invoke(self, message: str) -> str:
-        return self.__get_runnable().invoke(self.__create_input(message))
-
-    # def stream(self, message: str) -> Iterator:
-    #     return self.__get_runnable().stream(self.__create_input(message))
-
-    def __get_runnable(self) -> RunnableSerializable:
-        return self.prompt_template | self.llm | StrOutputParser()
-
-    def __create_input(self, message: str) -> dict:
-        return {"medical_question": message}
