@@ -49,7 +49,7 @@ class TerminalDemo:
         self.system = System()
 
     def run(self) -> None:
-        self.system.send_message("Medical Multi Agent initialized")
+        self.system.send_message("AI system initialized")
         self.system.send_message("Type '/bye' to exit the program")
         while True:
             self.system.send_message("Enter your questions or commands:")
