@@ -11,8 +11,8 @@ class JobSkillAgent(LLAMAAgent):
                 (
                     "system",
                     """You are an AI agent
-                 with expertise in job skills.\n
-                 You will be given some questions about job skills and you
+                 with expertise in AI job skills.\n
+                 You will be given some questions about AI job skills and you
                  should provide useful advise. \n""",
                 ),
                 ("user", "{input} \n"),
