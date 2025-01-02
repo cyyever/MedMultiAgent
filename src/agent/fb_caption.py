@@ -10,10 +10,8 @@ class FacebookCaptionAgent(LLAMAAgent):
             [
                 (
                     "system",
-                    """You are an AI agent
-                 with expertise in summary.\n
-                 You will be given an article summary and you
-                 should provide several Facebook captions according to the summary. \n""",
+                    """You are an AI agent with expertise in summary.\n
+                 You will be given an article summary and you should provide several Facebook captions according to the summary. \n""",
                 ),
                 ("user", "{input} \n"),
             ],

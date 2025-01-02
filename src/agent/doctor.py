@@ -10,10 +10,8 @@ class DoctorAgent(LLAMAAgent):
             [
                 (
                     "system",
-                    """You are an AI doctor
-                 with expertise in medical diagnosis.\n
-                 You will be given a medical question from a patient and you
-                 should provide your answer. \n""",
+                    """You are an AI doctor with expertise in medical diagnosis.\n
+                 You will be given a medical question from a patient and you should provide your answer. \n""",
                 ),
                 ("user", "{input} \n"),
             ],
