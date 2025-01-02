@@ -1,5 +1,5 @@
 rich
-loguru
 langchain-core
+langchain-ollama
 langchain-community
 flask
