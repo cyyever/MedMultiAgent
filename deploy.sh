@@ -1,4 +1,4 @@
-cd ~/MedMultiAgent/ui-flask_react/flask-api
+cd ui-flask_react/flask-api
 nohup flask run &
-cd ~/MedMultiAgent/ui-flask_react
+cd ../ui-flask_react
 nohup env PORT=3100 HOST=0.0.0.0 npm start &

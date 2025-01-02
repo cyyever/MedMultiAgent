@@ -1,44 +1,24 @@
+import sys
+import os
 import time
+
 from flask import Flask, Response, request
 
-import sys
-sys.path.insert(0, '../..')
+sys.path.insert(0, os.path.join("..", "..", "src"))
 
-from  coordinator import Coordinator
-
+from coordinator import Coordinator
 
 app = Flask(__name__)
 
 crdnt = Coordinator()
 
-@app.route('/time')
+
+@app.route("/time")
 def get_current_time():
-    return {'time': time.time()}
+    return {"time": time.time()}
 
-def generate():
-        # for i in range(3):
-        #     yield f"{time.time()}\n\n"
-        #     time.sleep(1)
 
-        slptime = 0.5
-
-        yield 'data: { choices: [{delta: {content: "苹"}, finish_reason: null}]}\n\n'
-        time.sleep(slptime)
-        yield 'data: { choices: [{delta: {content: "果"}, finish_reason: null}]}\n\n'
-        time.sleep(slptime)
-        yield 'data: { choices: [{delta: {content: "公司"}, finish_reason: null}]}\n\n'
-        time.sleep(slptime)
-        yield 'data: { choices: [{delta: {content: "是"}, finish_reason: null}]}\n\n'
-        time.sleep(slptime)
-        yield 'data: { choices: [{delta: {content: "一"}, finish_reason: null}]}'
-        time.sleep(slptime)
-        yield 'data: { choices: [{delta: {content: "家"}, finish_reason: null}]}'
-        time.sleep(slptime)
-        yield 'data: { choices: [{delta: {content: "科技"}, finish_reason: null}]}'
-        time.sleep(slptime)
-        yield 'data: { choices: [{delta: {content: "公司"}, finish_reason: "complete"}]}'
-        
-dummy_text = '''
+dummy_text = """
 A concerning combination of symptoms! As an AI doctor, I'll do my best to help you identify the possible cause.
 
 Extreme weakness and fatigue can be caused by various factors, including:
@@ -62,27 +42,29 @@ Vision tests: Perform a comprehensive eye exam to rule out any underlying eye co
 It's essential to consult with a healthcare professional, such as an endocrinologist, neurologist, or primary care physician, to further investigate these symptoms. They may order additional tests or refer you to a specialist for further evaluation and management.
 
 Please remember that self-diagnosis is not possible without proper medical training and equipment. It's crucial to seek professional guidance to ensure accurate diagnosis and effective treatment.
-'''
+"""
 
-@app.route('/stream-sse', methods=['GET', 'POST'])
+
+@app.route("/stream-sse", methods=["GET", "POST"])
 def stream():
-    if request.method == 'POST':
+    if request.method == "POST":
         data = request.get_json()
-        messages = data['messages']
+        messages = data["messages"]
         msg = messages[-1]
-        
+
         print(msg)
-    
-        res = crdnt.invoke(msg['content'])
+
+        res = crdnt.invoke(msg["content"])
     else:
         # res = generate()
         res = dummy_text
-    
+
     print(res)
-    response = Response(res, mimetype='text/event-stream')
-    response.headers['Cache-Control'] = 'no-cache'
-    response.headers['X-Accel-Buffering'] = 'no'  # Important for some proxies
+    response = Response(res, mimetype="text/event-stream")
+    response.headers["Cache-Control"] = "no-cache"
+    response.headers["X-Accel-Buffering"] = "no"  # Important for some proxies
     return response
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(threaded=True, debug=True)
