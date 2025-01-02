@@ -5,7 +5,7 @@ from langchain_ollama import ChatOllama
 
 
 class LLAMAAgent:
-    def __init__(self, model_name="llama3") -> None:
+    def __init__(self, model_name: str) -> None:
         self.__llm: ChatOllama = ChatOllama(model=model_name)
 
     @property
